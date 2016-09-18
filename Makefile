@@ -18,7 +18,7 @@
 
 .PHONY: all clean distclean
 
-GNUARM_PREFIX ?= /opt/gcc-linaro-aarch64-linux-gnu-4.9-2014.09_linux/bin/aarch64-linux-gnu-
+GNUARM_PREFIX ?= aarch64-linux-gnu-
 #TARGET ?= iPad4,2/12B440/iBoot
 
 CC = $(GNUARM_PREFIX)gcc
@@ -29,7 +29,7 @@ CFLAGS += -Os
 LD = $(GNUARM_PREFIX)gcc
 LDFLAGS = -L. -nostdlib -Wl,--build-id=none
 LDFLAGS += -Tscript.ld
-LDLIBS = -lp
+LDLIBS = -lp 
 
 AR = $(GNUARM_PREFIX)ar
 ARFLAGS = crus
@@ -41,7 +41,7 @@ ifeq ($(TARGET),)
 else
 include $(TARGET)/target.mak
 endif
-CFLAGS += -I.
+CFLAGS += -I. -fno-stack-protector
 #LDLIBS += -lgcc
 
 SOURCES = \
@@ -83,7 +83,7 @@ libp.a: $(LIBOBJECTS)
 	$(AR) $(ARFLAGS) $@ $^
 
 clean:
-	-$(RM) *.o *.elf *.a $(LIBOBJECTS)
+	-$(RM) *.o *.elf *.a payload $(LIBOBJECTS)
 
 distclean: clean
 	-$(RM) payload
